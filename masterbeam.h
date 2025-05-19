@@ -1,0 +1,12 @@
+#include <furi.h>
+#include <furi_hal.h>
+#include <gui/gui.h>
+#include <gui/view.h>
+#include <gui/view_dispatcher.h>
+#include <gui/modules/submenu.h>
+#include <gui/modules/text_input.h>
+#include <gui/modules/widget.h>
+#include <gui/modules/variable_item_list.h>
+#include <notification/notification.h>
+#include <notification/notification_messages.h>
+#include <furi_hal_bt.h>

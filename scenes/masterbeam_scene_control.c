@@ -3,7 +3,8 @@
 void masterbeam_scene_control_on_enter(void* context) {
     MasterbeamApp* app = context;
     view_dispatcher_switch_to_view(
-        app->view_dispatcher, scene_manager_get_scene_state(app->scene_manager, HidSceneMain));
+        app->view_dispatcher,
+        scene_manager_get_scene_state(app->scene_manager, MasterbeamSceneControl));
 }
 
 bool masterbeam_scene_control_on_event(void* context, SceneManagerEvent event) {

@@ -17,10 +17,8 @@ typedef struct MasterbeamApp MasterbeamApp;
 struct MasterbeamApp {
     SceneManager* scene_manager;
     ViewDispatcher* view_dispatcher;
-    Widget* widget;
     FuriHalBleProfileBase* ble_hid_profile;
     Bt* bt;
     Gui* gui;
     NotificationApp* notifications;
-    Popup* popup;
 };

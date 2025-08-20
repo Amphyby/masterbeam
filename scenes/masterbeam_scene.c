@@ -26,5 +26,5 @@ const SceneManagerHandlers masterbeam_scene_handlers = {
     .on_enter_handlers = masterbeam_on_enter_handlers,
     .on_event_handlers = masterbeam_on_event_handlers,
     .on_exit_handlers = masterbeam_on_exit_handlers,
-    .scene_num = HidSceneNum,
+    .scene_num = MasterbeamSceneNum,
 };

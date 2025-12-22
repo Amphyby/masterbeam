@@ -1,0 +1,8 @@
+App(
+    appid="masterbeam",
+    name="Masterbeam",
+    apptype=FlipperAppType.EXTERNAL,
+    entry_point="masterbeam_app",
+    requires=["gui", "ble_profile"],
+    fap_category="Communication",
+)

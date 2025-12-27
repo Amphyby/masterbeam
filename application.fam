@@ -5,4 +5,5 @@ App(
     entry_point="masterbeam_app",
     requires=["gui", "ble_profile"],
     fap_category="Communication",
+    fap_icon_assets="assets/icons",
 )

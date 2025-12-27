@@ -15,10 +15,6 @@ extern void scene_main_menu_on_enter(void* context);
 extern bool scene_main_menu_on_event(void* context, SceneManagerEvent event);
 extern void scene_main_menu_on_exit(void* context);
 
-extern void scene_connection_on_enter(void* context);
-extern bool scene_connection_on_event(void* context, SceneManagerEvent event);
-extern void scene_connection_on_exit(void* context);
-
 extern void scene_about_on_enter(void* context);
 extern bool scene_about_on_event(void* context, SceneManagerEvent event);
 extern void scene_about_on_exit(void* context);
@@ -30,7 +26,6 @@ extern void scene_main_panel_on_exit(void* context);
 // Scene on_enter handlers array
 static void (*const masterbeam_on_enter_handlers[])(void*) = {
     scene_main_menu_on_enter,
-    scene_connection_on_enter,
     scene_about_on_enter,
     scene_main_panel_on_enter,
 };
@@ -38,7 +33,6 @@ static void (*const masterbeam_on_enter_handlers[])(void*) = {
 // Scene on_event handlers array
 static bool (*const masterbeam_on_event_handlers[])(void*, SceneManagerEvent) = {
     scene_main_menu_on_event,
-    scene_connection_on_event,
     scene_about_on_event,
     scene_main_panel_on_event,
 };
@@ -46,7 +40,6 @@ static bool (*const masterbeam_on_event_handlers[])(void*, SceneManagerEvent) = 
 // Scene on_exit handlers array
 static void (*const masterbeam_on_exit_handlers[])(void*) = {
     scene_main_menu_on_exit,
-    scene_connection_on_exit,
     scene_about_on_exit,
     scene_main_panel_on_exit,
 };
@@ -98,7 +91,8 @@ static MasterbeamApp* masterbeam_app_alloc(void) {
     app->text_box = text_box_alloc();
     view_dispatcher_add_view(app->view_dispatcher, 1, text_box_get_view(app->text_box));
 
-    app->is_connected = false;
+    // Allocate BLE context
+    app->ble_ctx = ble_context_alloc();
 
     return app;
 }
@@ -106,6 +100,11 @@ static MasterbeamApp* masterbeam_app_alloc(void) {
 // App deallocation
 static void masterbeam_app_free(MasterbeamApp* app) {
     if(!app) return;
+
+    // Free BLE context
+    if(app->ble_ctx) {
+        ble_context_free(app->ble_ctx);
+    }
 
     // Free views
     view_dispatcher_remove_view(app->view_dispatcher, 0);

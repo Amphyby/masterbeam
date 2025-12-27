@@ -9,11 +9,15 @@
 
 typedef enum {
     MasterbeamSceneMainMenu,
-    MasterbeamSceneConnection,
     MasterbeamSceneAbout,
     MasterbeamSceneMainPanel,
     MasterbeamSceneCount,
 } MasterbeamScene;
+
+typedef struct {
+    FuriThread* thread;
+    FuriMutex* mutex;
+} BleContext;
 
 typedef struct {
     SceneManager* scene_manager;
@@ -21,11 +25,11 @@ typedef struct {
     Gui* gui;
     Menu* menu_main;
     TextBox* text_box;
-    bool is_connected;
+    BleContext* ble_ctx;
 } MasterbeamApp;
 
-typedef struct {
-    FuriThread* thread;
-    bool is_connected;
-    FuriMutex* mutex;
-} BleContext;
+// BLE API functions
+BleContext* ble_context_alloc(void);
+void ble_context_free(BleContext* ble_ctx);
+void ble_start_connection(BleContext* ble_ctx);
+void ble_send_command(BleContext* ble_ctx, const char* command);

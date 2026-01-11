@@ -18,10 +18,10 @@ typedef enum {
 typedef struct {
     FuriThread* thread;
     FuriMutex* mutex;
-    bool is_connected; // Connection status for Arduino (central) to read
+    bool is_connected; // Connection status (informational only)
     uint16_t svc_handle; // GATT service handle
-    BleGattCharacteristicInstance char_status; // Status characteristic instance
     BleGattCharacteristicInstance char_command; // Command characteristic instance
+    uint8_t command_value; // Command characteristic value (persistent)
 } BleContext;
 
 typedef struct {

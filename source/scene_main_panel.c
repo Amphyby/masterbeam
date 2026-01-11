@@ -2,6 +2,8 @@
 #include <gui/scene_manager.h>
 #include <gui/view_dispatcher.h>
 #include <gui/modules/text_box.h>
+#include <gui/view.h>
+#include <input/input.h>
 
 #include "../include/masterbeam.h"
 
@@ -42,6 +44,53 @@ static void update_panel_display(MasterbeamApp* app, SceneMainPanelData* scene_d
     text_box_set_text(text_box, display_text);
 }
 
+// Input event callback to capture button presses
+static bool scene_main_panel_input_callback(InputEvent* event, void* context) {
+    MasterbeamApp* app = (MasterbeamApp*)context;
+    SceneMainPanelData* scene_data = (SceneMainPanelData*)scene_manager_get_scene_state(
+        app->scene_manager, MasterbeamSceneMainPanel);
+
+    if(event->type != InputTypePress) {
+        return false;
+    }
+
+    const char* command_str = NULL;
+
+    switch(event->key) {
+    case InputKeyLeft:
+        scene_data->last_command = MainPanelCommandLeft;
+        command_str = "LEFT";
+        break;
+    case InputKeyRight:
+        scene_data->last_command = MainPanelCommandRight;
+        command_str = "RIGHT";
+        break;
+    case InputKeyUp:
+        scene_data->last_command = MainPanelCommandUp;
+        command_str = "UP";
+        break;
+    case InputKeyDown:
+        scene_data->last_command = MainPanelCommandDown;
+        command_str = "DOWN";
+        break;
+    case InputKeyOk:
+        scene_data->last_command = MainPanelCommandOk;
+        command_str = "OK";
+        break;
+    default:
+        return false;
+    }
+
+    if(command_str) {
+        // Send command via BLE
+        ble_send_command(app->ble_ctx, command_str);
+        update_panel_display(app, scene_data);
+        return true;
+    }
+
+    return false;
+}
+
 void scene_main_panel_on_enter(void* context) {
     MasterbeamApp* app = (MasterbeamApp*)context;
 
@@ -53,6 +102,12 @@ void scene_main_panel_on_enter(void* context) {
 
     // Set up text box display
     update_panel_display(app, scene_data);
+
+    // Set the text box view with input callback
+    View* view = text_box_get_view(app->text_box);
+    view_set_input_callback(view, scene_main_panel_input_callback);
+    view_set_context(view, app);
+
     view_dispatcher_switch_to_view(app->view_dispatcher, 1);
 }
 
